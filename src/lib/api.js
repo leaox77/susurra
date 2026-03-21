@@ -3,9 +3,14 @@ import { supabase } from './supabase'
 // ─── CONVERSATIONS ───────────────────────────────────────────
 
 export async function createConversation(module = 'ayuda') {
+  const { data: { session } } = await supabase.auth.getSession()
+  
   const { data, error } = await supabase
     .from('conversations')
-    .insert({ module })
+    .insert({ 
+      module,
+      session_id: session.user.id 
+    })
     .select()
     .single()
   if (error) throw error

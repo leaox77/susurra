@@ -12,6 +12,12 @@ const tipoLabels = {
   salud:      'Salud sexual',
 }
 
+const nivelColors = {
+  alto:        'bg-rosa-l text-[#72243E]',
+  medio:       'bg-lav-l text-violeta',
+  informativo: 'bg-azul-ll text-[#0C447C]',
+}
+
 export default function History() {
   const navigate = useNavigate()
   const [convs,   setConvs]   = useState([])
@@ -27,6 +33,10 @@ export default function History() {
   const handleDeleteAll = async () => {
     await deleteMyData()
     navigate('/', { replace: true })
+  }
+
+  const openConversation = (convId) => {
+    navigate(`/chat?conv=${convId}`)
   }
 
   if (loading) return (
@@ -52,37 +62,55 @@ export default function History() {
               <h2 className="font-serif text-lg text-noche">Mis conversaciones</h2>
               <button
                 onClick={() => setConfirm(true)}
-                className="text-xs text-rosa font-medium px-3 py-1.5 rounded-full border border-rosa/30 hover:bg-rosa-l transition-colors"
+                className="text-xs text-rosa font-medium px-3 py-1.5 rounded-full
+                           border border-rosa/30 hover:bg-rosa-l transition-colors"
               >
                 Borrar todo
               </button>
             </div>
 
-            <motion.div className="flex flex-col gap-3" initial="hidden" animate="show"
-              variants={{ show: { transition: { staggerChildren: 0.08 } } }}>
+            <motion.div className="flex flex-col gap-3"
+              initial="hidden" animate="show"
+              variants={{ show: { transition: { staggerChildren: 0.07 } } }}>
               {convs.map(conv => (
-                <motion.div key={conv.id}
+                <motion.div
+                  key={conv.id}
                   variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
-                  className="bg-white rounded-2xl p-4 border border-lavanda/20"
+                  onClick={() => openConversation(conv.id)}
+                  className="bg-white rounded-2xl p-4 border border-lavanda/20
+                             cursor-pointer hover:border-lavanda/50 hover:shadow-sm
+                             transition-all active:scale-[0.98]"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="text-xs text-purpura/60 mb-1">
+                    <div className="flex-1 min-w-0">
+                      {/* Fecha */}
+                      <p className="text-xs text-purpura/50 mb-1.5">
                         {new Date(conv.created_at).toLocaleDateString('es-BO', {
-                          day: 'numeric', month: 'long', year: 'numeric'
+                          day: 'numeric', month: 'long', year: 'numeric',
+                          hour: '2-digit', minute: '2-digit'
                         })}
                       </p>
-                      {conv.diagnosis_type && (
-                        <span className="inline-block bg-lav-l text-violeta text-xs px-2.5 py-0.5 rounded-full font-medium">
+
+                      {/* Badge diagnóstico */}
+                      {conv.diagnosis_type ? (
+                        <span className={`inline-block text-xs px-2.5 py-0.5 rounded-full font-medium
+                          ${nivelColors[conv.diagnosis_level] || 'bg-lav-l text-violeta'}`}>
                           {tipoLabels[conv.diagnosis_type] || conv.diagnosis_type}
                         </span>
+                      ) : (
+                        <span className="text-xs text-purpura/40 italic">Sin diagnóstico</span>
                       )}
                     </div>
-                    {conv.pdf_generated && (
-                      <span className="text-[10px] bg-[#D4F0E8] text-[#085041] px-2 py-0.5 rounded-full flex-shrink-0">
-                        PDF generado
-                      </span>
-                    )}
+
+                    <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+                      {conv.pdf_generated && (
+                        <span className="text-[10px] bg-[#D4F0E8] text-[#085041] px-2 py-0.5 rounded-full">
+                          PDF ✓
+                        </span>
+                      )}
+                      {/* Flecha de entrar */}
+                      <span className="text-lavanda/40 text-lg">›</span>
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -90,26 +118,22 @@ export default function History() {
           </>
         )}
 
-        {/* Modal confirmar borrado */}
+        {/* Modal borrado */}
         <AnimatePresence>
           {confirm && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-noche/60 flex items-end justify-center z-50 px-4 pb-8"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-noche/60 flex items-end justify-center z-[200] px-4 pb-8"
               onClick={() => setConfirm(false)}
             >
               <motion.div
-                initial={{ y: 60, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 60, opacity: 0 }}
+                initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 60, opacity: 0 }}
                 onClick={e => e.stopPropagation()}
                 className="bg-blanco rounded-3xl p-6 w-full max-w-sm"
               >
                 <h3 className="font-serif text-lg text-noche mb-2">¿Borrar todo?</h3>
                 <p className="text-sm text-purpura/70 mb-5 leading-relaxed">
-                  Se eliminará todo tu historial de conversaciones de forma permanente. No se puede deshacer.
+                  Se eliminará todo tu historial de forma permanente. No se puede deshacer.
                 </p>
                 <div className="flex gap-3">
                   <Button fullWidth variant="outline" onClick={() => setConfirm(false)}>Cancelar</Button>
@@ -131,20 +155,7 @@ function EmptyState({ onStart }) {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center justify-center min-h-[60dvh] gap-5 text-center px-4"
     >
-      <svg width="80" height="64" viewBox="0 0 80 64" fill="none">
-        <circle cx="22" cy="16" r="10" stroke="#B8AEED" strokeWidth="1.2" opacity=".6"/>
-        <circle cx="17" cy="12" r="2.5" fill="#B8AEED" opacity=".7"/>
-        <circle cx="24" cy="10" r="2" fill="#B8AEED" opacity=".65"/>
-        <path d="M18,25Q22,21 22,27L22,40L17,40Z" stroke="#B8AEED" strokeWidth="1.1" fill="none" opacity=".6"/>
-        <path d="M22,32Q15,36 10,42" stroke="#B8AEED" strokeWidth="1" strokeLinecap="round" fill="none" opacity=".55"/>
-        <path d="M22,31Q29,29 34,34" stroke="#B8AEED" strokeWidth="1" strokeLinecap="round" fill="none" opacity=".55"/>
-        <circle cx="58" cy="20" r="8" stroke="#D4A8D4" strokeWidth="1.2" opacity=".5"/>
-        <circle cx="54" cy="16" r="2" fill="#D4A8D4" opacity=".6"/>
-        <circle cx="61" cy="15" r="1.8" fill="#D4A8D4" opacity=".55"/>
-        <path d="M55,29Q58,25 58,30L58,42L54,42Z" stroke="#D4A8D4" strokeWidth="1" fill="none" opacity=".5"/>
-        <path d="M55,35Q48,32 42,28" stroke="#D4A8D4" strokeWidth="1" strokeLinecap="round" fill="none" opacity=".55"/>
-        <path d="M43,26Q41,23 42,19" stroke="#D4A8D4" strokeWidth=".8" strokeLinecap="round" fill="none" opacity=".4"/>
-      </svg>
+      <img src="/terry-lavanda.png" alt="Terry" className="w-20 h-20 object-contain opacity-60" />
       <div>
         <h3 className="font-serif text-lg text-noche mb-1">Aún no hay conversaciones</h3>
         <p className="text-sm text-purpura/60 leading-relaxed max-w-xs">

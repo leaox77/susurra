@@ -6,16 +6,16 @@ export const useSessionStore = create(
     (set, get) => ({
       userId: null,
       activeConversationId: null,
-      messages: [],            // mensajes en memoria de la conv. activa
+      messages: [],
       isLoading: false,
-      diagnosis: null,
+      diagnoses: [],   // array de diagnósticos — uno por tema detectado
 
       setUserId: (id) => set({ userId: id }),
 
       setActiveConversation: (id) => set({
         activeConversationId: id,
         messages: [],
-        diagnosis: null,
+        diagnoses: [],
       }),
 
       addMessage: (msg) => set((s) => ({
@@ -24,21 +24,29 @@ export const useSessionStore = create(
 
       setLoading: (v) => set({ isLoading: v }),
 
-      setDiagnosis: (d) => set({ diagnosis: d }),
+      // Agrega o actualiza diagnóstico por tipo
+      addDiagnosis: (d) => set((s) => {
+        const exists = s.diagnoses.findIndex(x => x.tipo === d.tipo)
+        if (exists >= 0) {
+          const updated = [...s.diagnoses]
+          updated[exists] = { ...d, timestamp: Date.now() }
+          return { diagnoses: updated }
+        }
+        return { diagnoses: [...s.diagnoses, { ...d, timestamp: Date.now() }] }
+      }),
 
       clearConversation: () => set({
         activeConversationId: null,
         messages: [],
-        diagnosis: null,
+        diagnoses: [],
       }),
 
-      // Devuelve el historial en formato que espera Claude API
       getMessagesForClaude: () =>
         get().messages.map(m => ({ role: m.role, content: m.content })),
     }),
     {
       name: 'susurra-session',
-      partialize: (s) => ({ userId: s.userId }),  // solo persiste el userId
+      partialize: (s) => ({ userId: s.userId }),
     }
   )
 )

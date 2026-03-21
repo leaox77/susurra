@@ -9,13 +9,18 @@ import { supabase } from './supabase'
  * @returns {Promise<{ respuesta, opciones, diagnostico }>}
  */
 export async function sendToAgent(messages, conversationId) {
+  // Obtener el token de la sesión activa
+  const { data: { session } } = await supabase.auth.getSession()
+
   const { data, error } = await supabase.functions.invoke('susurra-chat', {
-    body: { messages, conversation_id: conversationId }
+    body: { messages, conversation_id: conversationId },
+    headers: {
+      Authorization: `Bearer ${session.access_token}`
+    }
   })
 
   if (error) throw error
 
-  // Validar estructura del JSON
   if (!data?.respuesta || !Array.isArray(data?.opciones)) {
     throw new Error('Respuesta inválida del agente')
   }

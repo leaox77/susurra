@@ -5,8 +5,8 @@ import { useSessionStore } from '@/store/useSessionStore'
 
 export function useChat() {
   const {
-    activeConversationId, messages,
-    addMessage, setLoading, setDiagnosis,
+    activeConversationId,
+    addMessage, setLoading, addDiagnosis,
     setActiveConversation, getMessagesForClaude,
   } = useSessionStore()
 
@@ -19,7 +19,6 @@ export function useChat() {
   const sendMessage = useCallback(async (text, conversationId) => {
     const convId = conversationId || activeConversationId
 
-    // 1. Agregar mensaje del usuario al store y BD
     const userMsg = { role: 'user', content: text, id: Date.now() }
     addMessage(userMsg)
     await saveMessage({ conversationId: convId, role: 'user', content: text })
@@ -27,11 +26,9 @@ export function useChat() {
     setLoading(true)
 
     try {
-      // 2. Llamar al agente
       const claudeMessages = [...getMessagesForClaude()]
       const response = await sendToAgent(claudeMessages, convId)
 
-      // 3. Agregar respuesta al store
       const botMsg = {
         role: 'assistant',
         content: response.respuesta,
@@ -41,7 +38,6 @@ export function useChat() {
       }
       addMessage(botMsg)
 
-      // 4. Guardar en BD
       await saveMessage({
         conversationId: convId,
         role: 'assistant',
@@ -50,9 +46,8 @@ export function useChat() {
         diagnostico: response.diagnostico,
       })
 
-      // 5. Si hay diagnóstico, actualizarlo en la conversación
       if (response.diagnostico) {
-        setDiagnosis(response.diagnostico)
+        addDiagnosis(response.diagnostico)
         await updateConversationDiagnosis(
           convId,
           response.diagnostico.tipo,
@@ -66,5 +61,5 @@ export function useChat() {
     }
   }, [activeConversationId, getMessagesForClaude])
 
-  return { messages, sendMessage, startConversation }
+  return { sendMessage, startConversation }
 }

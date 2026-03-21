@@ -32,7 +32,7 @@ export async function ensureAnonymousSession() {
   await supabase.from('sessions').upsert({
     id: data.user.id,
     device_hint: window.innerWidth < 768 ? 'mobile' : 'desktop'
-  })
+  }, { onConflict: 'id' })
 
   return data.user.id
 }

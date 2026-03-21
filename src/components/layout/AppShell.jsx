@@ -69,14 +69,13 @@ function Header() {
 
 function LogoMark() {
   return (
-    <div className="w-7 h-7 bg-purpura rounded-full flex items-center justify-center flex-shrink-0">
-      <svg viewBox="0 0 18 18" fill="none" className="w-4 h-4">
-        <circle cx="5" cy="5" r="3" stroke="#F4F2FF" strokeWidth="1.2"/>
-        <circle cx="13" cy="6" r="2.5" stroke="#B8AEED" strokeWidth="1.2"/>
-        <path d="M9 10Q7 13 7 17" stroke="#F4F2FF" strokeWidth="1" strokeLinecap="round"/>
-        <path d="M9 10Q11 13 11 17" stroke="#B8AEED" strokeWidth="1" strokeLinecap="round"/>
-        <path d="M8.5 9Q9.5 8 10.5 9" stroke="#E8D8FF" strokeWidth=".8" strokeLinecap="round"/>
-      </svg>
+    <div className="w-13 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+      <div className="w-13 h-12 flex-shrink-0">
+          <img src="/icono.png" alt="Terry"
+            className="w-full h-full object-contain"
+            style={{ filter: 'drop-shadow(0 1px 4px rgba(123,111,204,0.5))' }}
+          />
+        </div>
     </div>
   )
 }
