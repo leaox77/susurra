@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-blanco font-sans text-texto antialiased;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 { @apply font-serif; }
+}
+
+@layer components {
+  /* Scrollbar personalizado */
+  .custom-scroll::-webkit-scrollbar { width: 4px; }
+  .custom-scroll::-webkit-scrollbar-track { @apply bg-lav-l rounded-full; }
+  .custom-scroll::-webkit-scrollbar-thumb { @apply bg-lavanda rounded-full; }
+
+  /* Safe area para móviles con notch */
+  .safe-top    { padding-top: env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+  /* Burbujas de chat */
+  .bubble-bot {
+    @apply bg-lav-l border border-lavanda/40 text-texto text-sm leading-relaxed;
+    border-radius: 4px 18px 18px 18px;
+    max-width: 88%;
+  }
+  .bubble-user {
+    @apply bg-violeta text-blanco text-sm leading-relaxed;
+    border-radius: 18px 4px 18px 18px;
+    max-width: 82%;
+    align-self: flex-end;
+  }
+
+  /* Pill de opción rápida */
+  .option-pill {
+    @apply border border-lavanda text-violeta bg-blanco text-xs font-medium
+           rounded-full px-3 py-1.5 cursor-pointer transition-all duration-200
+           hover:bg-lav-l hover:border-purpura active:scale-95;
+  }
+
+  /* Card principal de módulo */
+  .module-card {
+    @apply rounded-2xl p-4 cursor-pointer transition-all duration-200
+           active:scale-[0.97] hover:shadow-md;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  /* Animación de entrada escalonada */
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.10s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.20s; }
+
+  /* Gradiente de fondo suave */
+  .bg-susurra {
+    background: linear-gradient(160deg, #F4F2FF 0%, #E8E4FA 100%);
+  }
+}
