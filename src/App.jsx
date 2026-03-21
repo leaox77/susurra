@@ -7,6 +7,7 @@ import Learn    from '@/pages/Learn'
 import Game     from '@/pages/Game'
 import Contact  from '@/pages/Contact'
 import History  from '@/pages/History'
+import Portal  from '@/pages/Portal'
 
 export default function App() {
   useAuth()   // garantiza sesión anónima desde el arranque
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/aprender/juego"    element={<Game />} />
         <Route path="/contactar"         element={<Contact />} />
         <Route path="/historial"         element={<History />} />
+        <Route path="/portal"            element={<Portal />} />
       </Routes>
     </AppShell>
   )

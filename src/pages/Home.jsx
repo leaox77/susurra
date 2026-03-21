@@ -62,6 +62,7 @@ export default function Home() {
         <h2 className="font-serif text-2xl text-noche leading-tight">
           Hola, <span className="text-purpura">estamos aquí.</span>
         </h2>
+        
         <p className="text-sm text-muted mt-1 text-purpura/70">¿Qué necesitas hoy?</p>
       </motion.div>
 

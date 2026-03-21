@@ -10,20 +10,21 @@ const navItems = [
 
 export default function AppShell({ children }) {
   const { pathname } = useLocation()
-  const inChat = pathname.startsWith('/chat')
+  const inChat   = pathname.startsWith('/chat')
+  const inPortal = pathname === '/portal'    // ← Portal ocupa su propio header
 
   return (
     <div className="flex flex-col min-h-dvh bg-susurra">
-      {/* Header */}
-      {!inChat && <Header />}
+      {/* Header — oculto en chat Y en el portal (/) */}
+      {!inChat && !inPortal && <Header />}
 
       {/* Content */}
       <main className={`flex-1 overflow-y-auto ${!inChat ? 'pb-20' : ''}`}>
         {children}
       </main>
 
-      {/* Bottom nav — oculto en chat */}
-      {!inChat && (
+      {/* Bottom nav — oculto en chat Y en el portal (/) */}
+      {!inChat && !inPortal && (
         <nav className="fixed bottom-0 left-0 right-0 bg-noche safe-bottom z-50">
           <div className="flex justify-around items-center h-16 max-w-lg mx-auto px-2">
             {navItems.map(({ path, label, icon: Icon }) => {
@@ -71,11 +72,13 @@ function LogoMark() {
   return (
     <div className="w-13 h-12 rounded-full flex items-center justify-center flex-shrink-0">
       <div className="w-13 h-12 flex-shrink-0">
-          <img src="/icono.png" alt="Terry"
-            className="w-full h-full object-contain"
-            style={{ filter: 'drop-shadow(0 1px 4px rgba(123,111,204,0.5))' }}
-          />
-        </div>
+        <img
+          src="/icono.png"
+          alt="Susurra"
+          className="w-full h-full object-contain"
+          style={{ filter: 'drop-shadow(0 1px 4px rgba(123,111,204,0.5))' }}
+        />
+      </div>
     </div>
   )
 }
