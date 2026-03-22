@@ -1,18 +1,31 @@
 import { supabase } from './supabase'
 
 // ─── CONVERSATIONS ───────────────────────────────────────────
-
 export async function createConversation(module = 'ayuda') {
   const { data: { session } } = await supabase.auth.getSession()
-  
+  if (!session) throw new Error('No hay sesión activa')
+
+  const userId = session.user.id
+
+  // Garantizar que el registro en sessions existe ANTES de crear la conversación
+  const { error: sessionError } = await supabase
+    .from('sessions')
+    .upsert(
+      { id: userId, device_hint: window.innerWidth < 768 ? 'mobile' : 'desktop' },
+      { onConflict: 'id' }
+    )
+
+  if (sessionError) {
+    console.error('Error creando session:', sessionError)
+  }
+
+  // Ahora sí crear la conversación
   const { data, error } = await supabase
     .from('conversations')
-    .insert({ 
-      module,
-      session_id: session.user.id 
-    })
+    .insert({ module, session_id: userId })
     .select()
     .single()
+
   if (error) throw error
   return data
 }

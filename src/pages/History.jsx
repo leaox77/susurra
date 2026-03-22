@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getMyConversations } from '@/lib/api'
 import { deleteMyData } from '@/lib/supabase'
+import { useSessionStore } from '@/store/useSessionStore'
 import Button from '@/components/ui/Button'
 
 const tipoLabels = {
@@ -23,6 +24,7 @@ export default function History() {
   const [convs,   setConvs]   = useState([])
   const [loading, setLoading] = useState(true)
   const [confirm, setConfirm] = useState(false)
+  const { resetAll } = useSessionStore()
 
   useEffect(() => {
     getMyConversations()
@@ -32,6 +34,7 @@ export default function History() {
 
   const handleDeleteAll = async () => {
     await deleteMyData()
+    resetAll()
     navigate('/', { replace: true })
   }
 

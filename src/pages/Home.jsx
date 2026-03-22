@@ -62,8 +62,7 @@ export default function Home() {
         <h2 className="font-serif text-2xl text-noche leading-tight">
           Hola, <span className="text-purpura">estamos aquí.</span>
         </h2>
-        
-        <p className="text-sm text-muted mt-1 text-purpura/70">¿Qué necesitas hoy?</p>
+        <p className="text-sm mt-1 text-purpura/70">¿Qué necesitas hoy?</p>
       </motion.div>
 
       {/* Label sección */}
@@ -76,8 +75,9 @@ export default function Home() {
         ¿cómo podemos ayudarte?
       </motion.p>
 
-      {/* Módulos */}
+      {/* Módulos — con IDs para el tutorial */}
       <motion.div
+        id="tut-modules"
         variants={container}
         initial="hidden"
         animate="show"
@@ -86,6 +86,7 @@ export default function Home() {
         {modules.map((mod) => (
           <motion.div
             key={mod.id}
+            id={`tut-${mod.id}`}
             variants={item}
             whileTap={{ scale: 0.97 }}
             onClick={() => navigate(mod.path)}
@@ -105,6 +106,7 @@ export default function Home() {
 
       {/* Info de privacidad */}
       <motion.div
+        id="tut-privacidad"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}

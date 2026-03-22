@@ -2,35 +2,40 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const navItems = [
-  { path: '/',          label: 'Inicio',    icon: HomeIcon },
-  { path: '/aprender',  label: 'Aprender',  icon: BookIcon },
-  { path: '/contactar', label: 'Contactar', icon: PhoneIcon },
-  { path: '/historial', label: 'Historial', icon: ClockIcon },
+  { path: '/',          label: 'Inicio',    id: 'nav-inicio',    icon: HomeIcon  },
+  { path: '/aprender',  label: 'Aprender',  id: 'nav-aprender',  icon: BookIcon  },
+  { path: '/contactar', label: 'Contactar', id: 'nav-contactar', icon: PhoneIcon },
+  { path: '/historial', label: 'Historial', id: 'nav-historial', icon: ClockIcon },
 ]
 
 export default function AppShell({ children }) {
   const { pathname } = useLocation()
-  const inChat   = pathname.startsWith('/chat')
-  const inPortal = pathname === '/portal'    // ← Portal ocupa su propio header
+  const inChat = pathname.startsWith('/chat')
 
   return (
     <div className="flex flex-col min-h-dvh bg-susurra">
-      {/* Header — oculto en chat Y en el portal (/) */}
-      {!inChat && !inPortal && <Header />}
 
-      {/* Content */}
+      {/* Header — oculto en chat */}
+      {!inChat && <Header />}
+
+      {/* Contenido */}
       <main className={`flex-1 overflow-y-auto ${!inChat ? 'pb-20' : ''}`}>
         {children}
       </main>
 
-      {/* Bottom nav — oculto en chat Y en el portal (/) */}
-      {!inChat && !inPortal && (
+      {/* Bottom nav — oculto en chat */}
+      {!inChat && (
         <nav className="fixed bottom-0 left-0 right-0 bg-noche safe-bottom z-50">
           <div className="flex justify-around items-center h-16 max-w-lg mx-auto px-2">
-            {navItems.map(({ path, label, icon: Icon }) => {
+            {navItems.map(({ path, label, id, icon: Icon }) => {
               const active = pathname === path
               return (
-                <Link key={path} to={path} className="flex flex-col items-center gap-0.5 flex-1 py-2">
+                <Link
+                  key={path}
+                  to={path}
+                  id={`tut-${id}`}
+                  className="flex flex-col items-center gap-0.5 flex-1 py-2"
+                >
                   <div className="relative">
                     <Icon className={`w-5 h-5 transition-colors ${active ? 'text-lavanda' : 'text-purpura/50'}`} />
                     {active && (
@@ -70,20 +75,17 @@ function Header() {
 
 function LogoMark() {
   return (
-    <div className="w-13 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-      <div className="w-13 h-12 flex-shrink-0">
-        <img
-          src="/icono.png"
-          alt="Susurra"
-          className="w-full h-full object-contain"
-          style={{ filter: 'drop-shadow(0 1px 4px rgba(123,111,204,0.5))' }}
-        />
-      </div>
+    <div className="w-7 h-7 flex-shrink-0">
+      <img
+        src="/icono.png"
+        alt="Susurra"
+        className="w-full h-full object-contain"
+        style={{ filter: 'drop-shadow(0 1px 4px rgba(123,111,204,0.5))' }}
+      />
     </div>
   )
 }
 
-// ── Iconos SVG ──
 function HomeIcon({ className }) {
   return <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10L10 3l7 7M5 8.5V17h4v-4h2v4h4V8.5"/></svg>
 }

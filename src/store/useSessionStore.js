@@ -41,6 +41,13 @@ export const useSessionStore = create(
         diagnoses: [],
       }),
 
+      resetAll: () => set({
+        userId: null,
+        activeConversationId: null,
+        messages: [],
+        diagnoses: [],
+      }),
+
       getMessagesForClaude: () =>
         get().messages.map(m => ({ role: m.role, content: m.content })),
     }),
