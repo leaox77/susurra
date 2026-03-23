@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Susurra</string>
+    <string name="title_activity_main">Susurra</string>
+    <string name="package_name">com.susurra.app</string>
+    <string name="custom_url_scheme">com.susurra.app</string>
+</resources>

@@ -20,8 +20,8 @@ export default function AppShell({ children }) {
       {!inChat && !inPortal && <Header pathname={pathname} />}
 
       {/* Content */}
-      <main className={`flex-1 overflow-y-auto mx-auto w-full max-w-6xl px-4 md:px-6 lg:px-10 ${inChat ? '' : 'pb-20 md:pb-12'}`}>
-        {children}
+      <main className={`flex-1 overflow-y-auto ${inChat ? '' : 'pb-20 md:pb-12'}`}>
+                {children}
       </main>
 
       {/* Footer solo escritorio */}
