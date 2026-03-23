@@ -20,8 +20,8 @@ export default function Chat() {
   const resumeId       = searchParams.get('conv') // para retomar conversación del historial
 
   const { sendMessage, startConversation } = useChat()
-  const { messages, isLoading, diagnoses, activeConversationId, 
-        setActiveConversation, addMessage, clearConversation } = useSessionStore()
+    const { messages, isLoading, diagnoses, 
+      setActiveConversation, addMessage, clearConversation } = useSessionStore()
 
   const [input,       setInput]       = useState('')
   const [convId,      setConvId]      = useState(null)
@@ -111,9 +111,9 @@ export default function Chat() {
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        {/* Terry en el header */}
+        {/* Su en el header */}
         <div className="w-9 h-9 flex-shrink-0">
-          <img src="/terry-bicolor.png" alt="Terry"
+          <img src="/terry-bicolor.png" alt="Su"
             className="w-full h-full object-contain"
             style={{ filter: 'drop-shadow(0 1px 4px rgba(123,111,204,0.5))' }}
           />
@@ -122,7 +122,7 @@ export default function Chat() {
         <div className="flex-1 min-w-0">
           <p className="font-serif text-sm text-blanco leading-none">Su</p>
           <p className="text-[10px] text-menta flex items-center gap-1 mt-0.5">
-            <span className="w-1.5 h-1.5 bg-menta rounded-full animate-pulse-soft" />
+            <span className="w-1.5 h-1.5 bg-menta rounded-full animate-pulse-soft" />{' '}
             en línea contigo
           </p>
         </div>
@@ -154,16 +154,25 @@ export default function Chat() {
                     className="absolute right-0 top-8 bg-noche border border-lavanda/20
                                rounded-2xl shadow-lg overflow-hidden z-50 min-w-[180px]"
                   >
-                    {diagnoses.map((d, i) => (
-                      <button key={i} onClick={() => scrollToDiag(d)}
-                        className="w-full text-left px-3 py-2.5 flex items-center gap-2
-                                   hover:bg-purpura/20 transition-colors border-b border-lavanda/10 last:border-0">
-                        <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                          d.nivel === 'alto' ? 'bg-rosa' : d.nivel === 'medio' ? 'bg-lavanda' : 'bg-menta'
-                        }`} />
-                        <span className="text-xs text-blanco">{tipoLabels[d.tipo] || d.tipo}</span>
-                      </button>
-                    ))}
+                    {diagnoses.map((d) => {
+                      const levelColor = d.nivel === 'alto'
+                        ? 'bg-rosa'
+                        : d.nivel === 'medio'
+                          ? 'bg-lavanda'
+                          : 'bg-menta'
+                      const diagKey = `${d.tipo}-${d.nivel}`
+                      return (
+                        <button
+                          key={diagKey}
+                          onClick={() => scrollToDiag(d)}
+                          className="w-full text-left px-3 py-2.5 flex items-center gap-2
+                                   hover:bg-purpura/20 transition-colors border-b border-lavanda/10 last:border-0"
+                        >
+                          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${levelColor}`} />
+                          <span className="text-xs text-blanco">{tipoLabels[d.tipo] || d.tipo}</span>
+                        </button>
+                      )
+                    })}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -183,8 +192,13 @@ export default function Chat() {
       </header>
 
       {/* Mensajes */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 custom-scroll flex flex-col gap-3"
-           onClick={() => setShowDiagList(false)}>
+      <div
+        className="flex-1 overflow-y-auto px-4 py-4 custom-scroll flex flex-col gap-3"
+        role="button"
+        tabIndex={0}
+        onClick={() => setShowDiagList(false)}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowDiagList(false) }}
+      >
 
         <BotBubble
           message={INITIAL_MESSAGE}
@@ -268,8 +282,8 @@ function BotBubble({ message, onOptionClick, isLast }) {
           : <div className="w-8 h-8 flex-shrink-0" />
         }
         <div className="bubble-bot px-3.5 py-2.5">
-          <p className="text-sm leading-relaxed"
-             dangerouslySetInnerHTML={{ __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-violeta">$1</strong>') }}
+           <p className="text-sm leading-relaxed"
+             dangerouslySetInnerHTML={{ __html: message.content.replaceAll(/\*\*(.*?)\*\*/g, '<strong class="text-violeta">$1</strong>') }}
           />
         </div>
       </div>

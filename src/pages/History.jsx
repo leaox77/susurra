@@ -158,7 +158,7 @@ function EmptyState({ onStart }) {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center justify-center min-h-[60dvh] gap-5 text-center px-4"
     >
-      <img src="/terry-lavanda.png" alt="Terry" className="w-20 h-20 object-contain opacity-60" />
+      <img src="/terry-lavanda.png" alt="Su" className="w-20 h-20 object-contain opacity-60" />
       <div>
         <h3 className="font-serif text-lg text-noche mb-1">Aún no hay conversaciones</h3>
         <p className="text-sm text-purpura/60 leading-relaxed max-w-xs">

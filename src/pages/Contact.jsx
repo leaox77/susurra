@@ -36,7 +36,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-dvh bg-susurra">
-      <div className="px-4 pt-5 pb-4 max-w-lg mx-auto flex flex-col gap-4">
+      <div className="px-4 md:px-6 lg:px-10 pt-5 pb-6 max-w-6xl mx-auto flex flex-col gap-4 md:gap-5">
 
         {/* Banner emergencia */}
         <motion.div
@@ -59,7 +59,7 @@ export default function Contact() {
         </motion.div>
 
         {/* Filtros */}
-        <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar">
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar flex-wrap md:flex-nowrap">
           {filters.map((f, i) => (
             <motion.button
               key={f.id}
@@ -89,13 +89,14 @@ export default function Contact() {
             variants={container}
             initial="hidden"
             animate="show"
-            className="flex flex-col gap-3"
+            className="grid gap-3 md:gap-4"
+            style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}
           >
             {services.map(svc => (
               <motion.div
                 key={svc.id}
                 variants={item}
-                className={`bg-white rounded-2xl p-4 border border-lavanda/20 border-l-4
+                className={`bg-white rounded-2xl p-4 md:p-5 border border-lavanda/20 border-l-4
                   ${borderColors[svc.category] || 'border-l-lavanda'}`}
               >
                 <div className="flex items-start justify-between gap-2">

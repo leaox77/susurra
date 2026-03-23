@@ -1,142 +1,106 @@
-import { useState, useEffect } from 'react'
+/* eslint-disable react/prop-types */
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { getArticles } from '@/lib/api'
-
-const categories = [
-  { id: null,               label: 'Todos' },
-  { id: 'anticoncepcion',  label: 'Anticoncepción' },
-  { id: 'its',             label: 'ITS' },
-  { id: 'consentimiento',  label: 'Consentimiento' },
-  { id: 'derechos',        label: 'Mis derechos' },
-  { id: 'violencia_digital',label: 'Violencia digital' },
-]
-
-const catColors = {
-  anticoncepcion:   'bg-azul-ll text-[#0C447C] border-azul-l',
-  its:              'bg-rosa-l text-[#72243E] border-rosa',
-  consentimiento:   'bg-lav-l text-violeta border-lavanda',
-  derechos:         'bg-[#D4F0E8] text-[#085041] border-menta',
-  violencia_digital:'bg-[#FFF3E0] text-[#7A3B00] border-[#FFCC80]',
-  salud_general:    'bg-lav-l text-violeta border-lavanda',
-}
-
-const container = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }
-const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.35 } } }
+import { useAprenderContent } from '@/hooks/useAprenderContent'
+import { CategoryTabs } from '@/components/aprender/CategoryTabs'
+import { TopicHeroCard } from '@/components/aprender/TopicHeroCard'
+import { TopicsEmptyState } from '@/components/aprender/TopicsEmptyState'
+import { TopicsLoadingState } from '@/components/aprender/TopicsLoadingState'
 
 export default function Learn() {
-  const navigate      = useNavigate()
-  const [articles,    setArticles]   = useState([])
-  const [activeCat,   setActiveCat]  = useState(null)
-  const [search,      setSearch]     = useState('')
-  const [loading,     setLoading]    = useState(true)
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    setLoading(true)
-    getArticles(activeCat)
-      .then(setArticles)
-      .finally(() => setLoading(false))
-  }, [activeCat])
+  const {
+    categories,
+    activeCategory,
+    activeCategoryId,
+    setActiveCategoryId,
+    search,
+    setSearch,
+    topics,
+    loading,
+    error,
+  } = useAprenderContent()
 
-  const filtered = articles.filter(a =>
-    !search || a.title.toLowerCase().includes(search.toLowerCase())
-  )
+  const hasSearch = useMemo(() => Boolean(search.trim()), [search])
 
   return (
     <div className="min-h-dvh bg-susurra">
-      <div className="px-4 pt-5 pb-4 max-w-lg mx-auto flex flex-col gap-4">
+      <div className="px-4 md:px-6 lg:px-10 pt-5 pb-6 max-w-6xl mx-auto flex flex-col gap-4 md:gap-5">
 
         {/* Buscador */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 bg-white rounded-2xl px-4 py-2.5 border border-lavanda/30"
+          className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 md:py-3.5 border border-lavanda/30 shadow-sm"
         >
           <SearchIcon className="w-4 h-4 text-lavanda flex-shrink-0" />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar un tema..."
-            className="flex-1 text-sm text-texto placeholder-lavanda outline-none bg-transparent"
+            className="flex-1 text-sm md:text-base text-texto placeholder-lavanda outline-none bg-transparent"
           />
         </motion.div>
 
         {/* Categorías */}
-        <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar">
-          {categories.map((cat, i) => (
-            <motion.button
-              key={cat.id ?? 'all'}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
-              onClick={() => setActiveCat(cat.id)}
-              className={`flex-shrink-0 text-xs font-semibold px-3.5 py-1.5 rounded-full transition-all
-                ${activeCat === cat.id
-                  ? 'bg-violeta text-blanco'
-                  : 'bg-lav-l text-purpura hover:bg-lavanda/30'}`}
-            >
-              {cat.label}
-            </motion.button>
-          ))}
-        </div>
+        <CategoryTabs
+          categories={categories}
+          activeCategoryId={activeCategoryId}
+          onSelectCategory={setActiveCategoryId}
+        />
 
-        {/* Tarjeta destacada — Mito o Verdad */}
+        {/* Tarjeta destacada de juego */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15 }}
           onClick={() => navigate('/aprender/juego')}
-          className="bg-azul-l rounded-2xl p-4 flex items-center gap-3 cursor-pointer
-                     border border-azul/20 hover:border-azul/40 transition-all active:scale-[0.98]"
+          className="bg-azul-l rounded-2xl p-4 md:p-5 flex items-center gap-3 md:gap-4 cursor-pointer
+                     border border-azul/20 hover:border-azul/40 transition-all active:scale-[0.98] shadow-sm"
         >
-          <div className="w-12 h-12 bg-azul rounded-xl flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 md:w-14 md:h-14 bg-azul rounded-xl flex items-center justify-center flex-shrink-0">
             <StarIcon className="w-6 h-6 text-[#042C53]" />
           </div>
-          <div>
-            <h3 className="font-semibold text-sm text-[#0C447C]">¿Mito o Verdad?</h3>
-            <p className="text-xs text-[#185FA5] mt-0.5">Pon a prueba lo que sabes — 8 preguntas</p>
+          <div className="space-y-1">
+            <h3 className="font-semibold text-sm md:text-base text-[#0C447C]">¿Mito o Verdad?</h3>
+            <p className="text-xs md:text-sm text-[#185FA5]">Pon a prueba lo que sabes — 8 preguntas</p>
           </div>
           <ChevronRight className="w-4 h-4 text-azul ml-auto" />
         </motion.div>
 
-        {/* Grid de artículos */}
-        {loading ? (
-          <div className="grid grid-cols-2 gap-3">
-            {[1,2,3,4].map(i => (
-              <div key={i} className="bg-white rounded-2xl h-28 animate-pulse border border-lavanda/20" />
+        {/* Estado de error */}
+        {error && (
+          <div className="rounded-2xl border border-[#F5C2C2] bg-[#FFF4F4] p-4 text-sm text-[#9B1C1C]">
+            No pudimos cargar la informacion de aprendizaje desde la base de datos.
+          </div>
+        )}
+
+        {/* Tarjetas de tema y conceptos */}
+        {loading ? <TopicsLoadingState /> : null}
+
+        {!loading && topics.length === 0 ? (
+          <TopicsEmptyState
+            title={hasSearch ? 'Sin coincidencias' : 'Proximamente'}
+            message={
+              hasSearch
+                ? 'No encontramos conceptos con ese termino dentro de esta categoria.'
+                : `Aun estamos preparando la informacion para ${activeCategory?.title || 'esta categoria'}.`
+            }
+          />
+        ) : null}
+
+        {!loading && topics.length > 0 ? (
+          <div
+            className="grid gap-4 md:gap-5 items-stretch"
+            style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}
+          >
+            {topics.map((topic) => (
+              <TopicHeroCard key={topic.id} topic={topic} />
             ))}
           </div>
-        ) : (
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="grid grid-cols-2 gap-3"
-          >
-            {filtered.map(article => (
-              <motion.div
-                key={article.id}
-                variants={item}
-                onClick={() => navigate(`/aprender/${article.slug}`)}
-                className={`rounded-2xl p-3.5 border cursor-pointer transition-all active:scale-[0.97]
-                  ${catColors[article.category] || 'bg-lav-l text-violeta border-lavanda'}`}
-              >
-                <h4 className="font-semibold text-xs leading-snug mb-1">{article.title}</h4>
-                <p className="text-[11px] opacity-75 leading-snug line-clamp-2">{article.summary}</p>
-                <p className="text-[10px] opacity-50 mt-2">{article.read_time} min de lectura</p>
-              </motion.div>
-            ))}
-
-            {filtered.length === 0 && (
-              <motion.div
-                variants={item}
-                className="col-span-2 text-center py-8 text-purpura/50 text-sm"
-              >
-                No se encontraron artículos
-              </motion.div>
-            )}
-          </motion.div>
-        )}
+        ) : null}
       </div>
     </div>
   )

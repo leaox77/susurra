@@ -1,12 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion'
 
 /**
- * Terry — mascot animado de Susurra.
+ * Su — avatar animado de Susurra.
  * state: 'idle' | 'typing'
  * size:  'sm' | 'md' | 'lg'
- *
- * idle   → Terry lavanda, flota suave y quietito
- * typing → Terry bicolor, se mueve agitado mientras escribe
+
+ * idle   → Su lavanda, flota suave y quietito
+ * typing → Su bicolor, se mueve agitado mientras escribe
  */
 export default function TerryAvatar({ state = 'idle', size = 'md' }) {
   const sizes = { sm: 'w-8 h-8', md: 'w-12 h-12', lg: 'w-24 h-24' }
@@ -16,7 +16,7 @@ export default function TerryAvatar({ state = 'idle', size = 'md' }) {
     <div className={`relative flex-shrink-0 ${sizes[size]}`}>
       <AnimatePresence mode="wait">
 
-        {/* Terry lavanda — idle, escuchando, quietito */}
+        {/* Su lavanda — idle, escuchando, quietito */}
         {!isTyping && (
           <motion.div
             key="lavanda"
@@ -28,7 +28,7 @@ export default function TerryAvatar({ state = 'idle', size = 'md' }) {
           >
             <motion.img
               src="/terry-lavanda.png"
-              alt="Terry"
+              alt="Su"
               className="w-full h-full object-contain"
               style={{ filter: 'drop-shadow(0 2px 6px rgba(123,111,204,0.25))' }}
               animate={{
@@ -43,7 +43,7 @@ export default function TerryAvatar({ state = 'idle', size = 'md' }) {
           </motion.div>
         )}
 
-        {/* Terry bicolor — typing, hablando, agitado */}
+        {/* Su bicolor — typing, hablando, agitado */}
         {isTyping && (
           <motion.div
             key="bicolor"
@@ -55,7 +55,7 @@ export default function TerryAvatar({ state = 'idle', size = 'md' }) {
           >
             <motion.img
               src="/terry-bicolor.png"
-              alt="Terry hablando"
+              alt="Su hablando"
               className="w-full h-full object-contain"
               style={{ filter: 'drop-shadow(0 2px 8px rgba(74,63,140,0.35))' }}
               animate={{
