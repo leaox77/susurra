@@ -12,11 +12,11 @@ const navItems = [
 export default function AppShell({ children }) {
   const { pathname } = useLocation()
   const inChat = pathname.startsWith('/chat')
-  const inPortal = pathname === '/'
+  const inPortal = pathname.startsWith('/portal')
 
   return (
     <div className="flex flex-col min-h-dvh bg-susurra">
-      {/* Header — oculto en chat Y en el portal (/) */}
+      {/* Header — oculto en chat y en portal */}
       {!inChat && !inPortal && <Header pathname={pathname} />}
 
       {/* Content */}
@@ -27,7 +27,7 @@ export default function AppShell({ children }) {
       {/* Footer solo escritorio */}
       {!inChat && !inPortal && <Footer pathname={pathname} />}
 
-      {/* Bottom nav — oculto en chat Y en el portal (/) */}
+      {/* Bottom nav — oculto en chat y en portal */}
       {!inChat && !inPortal && (
         <nav className="fixed bottom-0 left-0 right-0 bg-noche safe-bottom z-50 md:hidden">
           <div className="flex justify-around items-center h-16 max-w-lg mx-auto px-2">

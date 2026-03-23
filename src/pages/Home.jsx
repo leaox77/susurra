@@ -47,86 +47,14 @@ const container = {
 const item = {
   hidden: { opacity: 0, y: 16 },
   show:   { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
-      {/* Hero desktop */}
-      <div className="grid md:grid-cols-[1.1fr,0.9fr] gap-6 md:gap-10 items-center mb-8 md:mb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-4"
-        >
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge color="purple" className="text-[10px] md:text-[11px] px-3 py-1">Su está disponible</Badge>
-            <span className="text-[11px] md:text-xs text-purpura/70">Anonimato activo</span>
-          </div>
-          <div className="space-y-2">
-            <h1 className="font-serif text-2xl md:text-4xl text-noche leading-tight text-balance">
-              Hola, <span className="text-purpura">estamos aquí</span> para escucharte.
-            </h1>
-            <p className="text-sm md:text-base text-purpura/80 max-w-xl">
-              Su te acompaña con apoyo inmediato, aprendizaje seguro y contactos confiables. Sin registros, sin juicio.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button onClick={() => navigate('/chat')} className="shadow-sm hover:shadow-md">Hablar con Su</Button>
-            <Button variant="outline" onClick={() => navigate('/aprender')} className="text-purpura border-purpura/50">
-              Explorar recursos
-            </Button>
-          </div>
-          <div className="flex flex-wrap gap-2 md:gap-3 pt-1 text-xs md:text-sm text-purpura/70">
-            <div className="flex items-center gap-2 bg-white/70 rounded-full px-3 py-2 border border-lavanda/40">
-              <ShieldIcon className="w-4 h-4 text-purpura" />
-              100% anónimo
-            </div>
-            <div className="flex items-center gap-2 bg-white/70 rounded-full px-3 py-2 border border-lavanda/40">
-              <SparkleIcon className="w-4 h-4 text-purpura" />
-              Respuestas empáticas y claras
-            </div>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="relative bg-white/80 border border-lavanda/30 rounded-3xl p-4 md:p-5 shadow-sm"
-        >
-          <div className="hidden md:inline-flex absolute -top-4 -right-4 bg-lavanda text-noche text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-            Siempre en línea
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-lav-l flex items-center justify-center overflow-hidden">
-              <img src="/terry-lavanda.png" alt="Su" className="w-full h-full object-contain" />
-            </div>
-            <div className="space-y-2">
-              <p className="text-xs md:text-sm text-purpura/70">Tu guía</p>
-              <h3 className="font-serif text-lg md:text-xl text-noche leading-tight">Su te escucha sin juicio</h3>
-              <p className="text-sm text-purpura/70 leading-relaxed md:max-w-sm">
-                Comparte lo que pasa y recibe pasos claros, información confiable y contactos seguros cerca de ti.
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-purpura/80">
-            <div className="bg-lav-l/70 border border-lavanda/40 rounded-xl p-3">
-              <p className="font-semibold text-purpura">Apoyo inmediato</p>
-              <p className="text-xs mt-1 text-purpura/70">Chat anónimo con orientación práctica.</p>
-            </div>
-            <div className="bg-lav-l/70 border border-lavanda/40 rounded-xl p-3">
-              <p className="font-semibold text-purpura">Recursos claros</p>
-              <p className="text-xs mt-1 text-purpura/70">Aprende a cuidarte y a pedir ayuda.</p>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-6"
-      >
-        <h2 className="font-serif text-2xl text-noche leading-tight">
-          Hola, <span className="text-purpura">estamos aquí.</span>
-        </h2>
-        <p className="text-sm mt-1 text-purpura/70">¿Qué necesitas hoy?</p>
-      </motion.div>
-=======
+}
+
+function Home() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-10 pt-5 pb-6 md:pt-10 md:pb-10">
+
       {/* Hero desktop */}
       <div className="grid md:grid-cols-[1.1fr,0.9fr] gap-6 md:gap-10 items-center mb-8 md:mb-12">
         <motion.div
@@ -201,7 +129,6 @@ const item = {
           </div>
         </motion.div>
       </div>
->>>>>>> 8b59c50 (Mejoras UI y aprender)
 
       {/* Label sección */}
       <motion.p
@@ -264,6 +191,8 @@ const item = {
   )
 }
 
+export default Home
+
 function ChatIcon({ className }) {
   return <svg className={className} viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M2 9C2 5.7 5.1 3 9 3s7 2.7 7 6-3.1 6-7 6H2.5L1.5 17"/><circle cx="6.5" cy="9" r=".7" fill="currentColor"/><circle cx="9" cy="9" r=".7" fill="currentColor"/><circle cx="11.5" cy="9" r=".7" fill="currentColor"/></svg>
 }
@@ -275,11 +204,7 @@ function PhoneIcon({ className }) {
 }
 function ShieldIcon({ className }) {
   return <svg className={className} viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M9 2L3 4.5V9c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V4.5L9 2z"/><path d="M6.5 9l2 2 3-3"/></svg>
-<<<<<<< HEAD
-}
-=======
 }
 function SparkleIcon({ className }) {
   return <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M10 3l1.4 3.6L15 8l-3.6 1.4L10 13l-1.4-3.6L5 8l3.6-1.4L10 3z"/><path d="M4 14l.8 2 .8-2L8 13.2 6 12.4 5.6 10.4 4.8 12.4 3 13.2 4 14z"/><path d="M15 4l.7 1.6L17 6l-1.3.4L15 8l-.7-1.6L13 6l1.3-.4L15 4z"/></svg>
 }
->>>>>>> 8b59c50 (Mejoras UI y aprender)
